@@ -2,6 +2,8 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from dotenv import load_dotenv
+load_dotenv()
 
 def preprocess_wine_csv(csv_path="wine_dataset.csv"):
     df = pd.read_csv(csv_path)

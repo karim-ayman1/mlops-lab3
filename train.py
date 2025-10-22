@@ -5,6 +5,9 @@ import json
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # 1. Load preprocessed training and testing data
 train_df = pd.read_csv('wine_train_preprocessed.csv')
 test_df = pd.read_csv('wine_test_preprocessed.csv')
@@ -40,6 +43,6 @@ plt.ylabel('Actual')
 plt.title('SVM Confusion Matrix (Test Data)')
 plt.savefig('confusion_matrix_svm.png')
 
-print("✅ SVM model training & testing complete!")
+print("SVM model training & testing complete!")
 print(f"Test Accuracy: {acc:.4f}")
 print("Saved: metrics_svm.json & confusion_matrix_svm.png")
