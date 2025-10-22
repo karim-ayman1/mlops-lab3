@@ -1,0 +1,33 @@
+stages:
+  get_data:
+    cmd: python get_data.py
+    deps:
+      - get_data.py
+    outs:
+      - wine_dataset.csv
+
+  preprocess:
+    cmd: python preprocessing.py
+    deps:
+      - preprocessing.py
+      - wine_dataset.csv
+    outs:
+      - wine_train_preprocessed.csv
+      - wine_test_preprocessed.csv
+
+  train:
+    cmd: python train.py
+    deps:
+      - train.py
+      - wine_train_preprocessed.csv
+      - wine_test_preprocessed.csv
+    outs:
+      - metrics_svm.json
+      - confusion_matrix_svm.png
+
+  tune:
+    cmd: python tune.py
+    deps:
+      - tune.py
+      - wine_train_preprocessed.csv
+      - wine_test_preprocessed.csv
