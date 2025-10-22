@@ -4,7 +4,19 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 import pandas as pd
+import joblib
+import os
+import sys
 
+from dotenv import load_dotenv
+load_dotenv()
+import os 
+os.environ["MLFLOW_TRACKING_USERNAME"] = "karim-ayman1"
+os.environ["MLFLOW_TRACKING_PASSWORD"] = "8b8fa154d36024e478db608493e11acc642b5a17"
+
+mlflow.set_tracking_uri("https://dagshub.com/karim-ayman1/mlops-lab3.mlflow")
+
+sys.stdout.reconfigure(encoding='utf-8')
 # 1. Load your preprocessed dataset
 df_train = pd.read_csv("wine_train_preprocessed.csv")
 df_test = pd.read_csv("wine_test_preprocessed.csv")
@@ -16,8 +28,8 @@ y_test = df_test.iloc[:, -1]
 
 # 2. Define hyperparameter grid to test
 param_grid = {
-    "kernel": ["linear", "rbf", "poly"],
-    "C": [0.1, 1, 10]
+    "kernel": ["linear", "rbf"],
+    "C": [0.1, 1]
 }
 
 # 3. Start a main MLflow parent run
@@ -37,8 +49,13 @@ with mlflow.start_run(run_name="SVM_Tuning") as parent_run:
                 mlflow.log_param("kernel", kernel)
                 mlflow.log_param("C", c)
                 mlflow.log_metric("accuracy", acc)
-                mlflow.sklearn.log_model(model, "model")
+                #mlflow.sklearn.log_model(model, "model")
+                
+                os.makedirs("models", exist_ok=True)
+                model_path = f"models/svm_{kernel}_C{c}.pkl"
+                joblib.dump(model, model_path)
+                mlflow.log_artifact(model_path)
 
-                print(f"✅ SVM(kernel={kernel}, C={c}) -> accuracy={acc:.4f}")
+                print(f"SVM(kernel={kernel}, C={c}) -> accuracy={acc:.4f}")
 
-print("🎯 All SVM tuning runs completed and logged to MLflow!")
+print("All SVM tuning runs completed and logged to MLflow!")

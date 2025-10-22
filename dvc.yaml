@@ -21,9 +21,6 @@ stages:
       - train.py
       - wine_train_preprocessed.csv
       - wine_test_preprocessed.csv
-    outs:
-      - metrics_svm.json
-      - confusion_matrix_svm.png
 
   tune:
     cmd: python tune.py
